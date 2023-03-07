@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('item_id')->constrained();
+            $table->integer('purchasable_id');
+            $table->string('purchasable_type');
             $table->double('price');
-            $table->unsignedInteger('quantity');
+            $table->integer('quantity')->default(1);
+            $table->tinyInteger('status')->default(1);
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

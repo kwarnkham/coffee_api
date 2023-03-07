@@ -8,14 +8,34 @@ use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
-    public function store(Request $request)
+    public function purchase(Request $request)
     {
         $data = $request->validate([
-            'name' => ['required', 'unique:items,name']
+            'name' => ['required'],
+            'quantity' => ['required', 'numeric'],
+            'price' => ['required', 'numeric'],
+            'note' => ['']
+        ]);
+        $item = Item::query()->where('name', $data['name'])->first();
+        if (!$item) $item = $item = Item::create([
+            'name' => $data['name']
         ]);
 
-        $item = Item::create($data);
+        $item->purchases()->create([
+            'price' => $data['price'],
+            'quantity' => $data['quantity'],
+            'note' => $data['note']
+        ]);
 
-        return response()->json(['item' => $item], ResponseStatus::CREATED->value);
+        return response()->json(['item' => $item->fresh()], ResponseStatus::CREATED->value);
+    }
+
+    public function index()
+    {
+        $filters = request()->validate([
+            'search' => ['sometimes', 'required']
+        ]);
+        $query = Item::query()->latest('id')->filter($filters);
+        return response()->json(['data' => $query->paginate(request()->per_page ?? 20)]);
     }
 }
