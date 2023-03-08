@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PurchaseStatus;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,13 @@ class Item extends Model
     public function purchases(): MorphMany
     {
         return $this->morphMany(Purchase::class, 'purchasable');
+    }
+
+    public function latestPurchase()
+    {
+        return $this->morphOne(Purchase::class, 'purchasable')
+            ->latestOfMany()
+            ->where('status', PurchaseStatus::NORMAL->value);
     }
 
     public function scopeFilter(Builder $query, array $filters)

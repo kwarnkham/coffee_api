@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\ResponseStatus;
 use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ItemController extends Controller
 {
@@ -37,5 +38,27 @@ class ItemController extends Controller
         ]);
         $query = Item::query()->latest('id')->filter($filters);
         return response()->json(['data' => $query->paginate(request()->per_page ?? 20)]);
+    }
+
+    public function search()
+    {
+        $filters = request()->validate([
+            'search' => ['sometimes', 'required'],
+            'limit' => ['sometimes', 'required', 'numeric'],
+        ]);
+        $query = Item::query()->filter($filters)->with(['latestPurchase']);
+
+        return response()->json(['items' => $query->get()]);
+    }
+
+    public function update(Request $request, Item $item)
+    {
+        $data = $request->validate([
+            'name' => ['required', Rule::unique('items', 'name')->ignoreModel($item)],
+        ]);
+
+        $item->update(['name' => $data['name']]);
+
+        return response()->json(['item' => $item->fresh()]);
     }
 }

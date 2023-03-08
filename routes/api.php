@@ -33,5 +33,7 @@ Route::controller(ItemController::class)->prefix('items')->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('purchase', 'purchase')->name('items.purchase');
         Route::get('', 'index')->name('items.index');
+        Route::get('search', 'search')->name('items.search');
+        Route::put('{item}', 'update')->name('items.update');
     });
 });
