@@ -61,4 +61,15 @@ class ItemController extends Controller
 
         return response()->json(['item' => $item->fresh()]);
     }
+
+    public function reduceStock(Request $request, Item $item)
+    {
+        $data = $request->validate([
+            'quantity' => ['required', 'numeric', 'gt:0', 'lte:' . $item->stock],
+        ]);
+
+        $item->update(['stock' => $item->stock -= $data['quantity']]);
+
+        return response()->json(['item' => $item->fresh()]);
+    }
 }

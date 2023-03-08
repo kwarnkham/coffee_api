@@ -35,5 +35,6 @@ Route::controller(ItemController::class)->prefix('items')->group(function () {
         Route::get('', 'index')->name('items.index');
         Route::get('search', 'search')->name('items.search');
         Route::put('{item}', 'update')->name('items.update');
+        Route::post('{item}/reduce-stock', 'reduceStock')->name('items.reduceStock');
     });
 });
