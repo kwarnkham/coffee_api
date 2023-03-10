@@ -22,6 +22,7 @@ class OrderController extends Controller
             'products.*.discount' => ['numeric'],
             'products.*.toppings' => ['array'],
             'products.*.toppings.*' => ['numeric'],
+            'note' => ['']
         ]);
 
         $products = Product::query()
@@ -68,7 +69,8 @@ class OrderController extends Controller
         }
         $order = DB::transaction(function () use ($data, $products) {
             $order = Order::query()->create([
-                'user_id' => $data['user_id']
+                'user_id' => $data['user_id'],
+                'note' => $data['note'] ?? ''
             ]);
 
             $productsData = array_map(function ($productData) use ($products) {
