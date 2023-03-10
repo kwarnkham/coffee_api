@@ -39,9 +39,12 @@ class OrderController extends Controller
         );
 
         $products->each(function ($product) use ($data) {
-
             abort_if(
-                $product->stock < array_filter($data['products'], fn ($val) => $val['id'] == $product->id)[0]['quantity'],
+                $product->stock < array_reduce(
+                    array_filter($data['products'], fn ($val) => $val['id'] == $product->id),
+                    fn ($carry, $val) => $val['quantity'] + $carry,
+                    0
+                ),
                 ResponseStatus::BAD_REQUEST->value,
                 "Quantity cannot be greater than stock($product->name)."
             );
