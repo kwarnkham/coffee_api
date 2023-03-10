@@ -67,7 +67,9 @@ class ItemController extends Controller
         $data = $request->validate([
             'quantity' => ['required', 'numeric', 'gt:0', 'lte:' . $item->stock],
         ]);
-
+        $item->consumes()->create([
+            'quantity' => $data['quantity']
+        ]);
         $item->update(['stock' => $item->stock -= $data['quantity']]);
 
         return response()->json(['item' => $item->fresh()]);

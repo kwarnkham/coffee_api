@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ToppingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,5 +39,24 @@ Route::controller(ItemController::class)->prefix('items')->group(function () {
         Route::get('search', 'search')->name('items.search');
         Route::put('{item}', 'update')->name('items.update');
         Route::post('{item}/reduce-stock', 'reduceStock')->name('items.reduceStock');
+    });
+});
+
+Route::controller(ProductController::class)->prefix('products')->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::post('{product}/stock', 'stock')->name('products.stock');
+    });
+    Route::get('', 'index')->name('products.index');
+});
+
+Route::controller(ToppingController::class)->prefix('toppings')->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('', 'index')->name('toppings.index');
+    });
+});
+
+Route::controller(OrderController::class)->prefix('orders')->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::post('', 'store')->name('orders.store');
     });
 });

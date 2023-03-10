@@ -24,6 +24,11 @@ class Item extends Model
             ->where('status', PurchaseStatus::NORMAL->value);
     }
 
+    public function consumes()
+    {
+        return $this->hasMany(Consume::class);
+    }
+
     public function scopeFilter(Builder $query, array $filters)
     {
         $query->when(

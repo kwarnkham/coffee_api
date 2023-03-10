@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\PurchaseStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('purchases', function (Blueprint $table) {
+        Schema::create('order_product_topping', function (Blueprint $table) {
             $table->id();
-            $table->integer('purchasable_id');
-            $table->string('purchasable_type');
+            $table->foreignId('order_product_id')->constrained('order_product');
+            $table->foreignId('topping_id')->constrained();
+            $table->string('name');
+            $table->unsignedInteger('quantity');
             $table->double('price');
-            $table->integer('quantity')->default(1);
-            $table->tinyInteger('status')->default(PurchaseStatus::NORMAL->value);
-            $table->string('note')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('purchases');
+        Schema::dropIfExists('order_product_topping');
     }
 };
