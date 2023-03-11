@@ -58,5 +58,8 @@ Route::controller(ToppingController::class)->prefix('toppings')->group(function 
 Route::controller(OrderController::class)->prefix('orders')->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('', 'store')->name('orders.store');
+        Route::get('{order}', 'show')->name('orders.show');
+        Route::put('{order}', 'update')->name('orders.update');
+        Route::get('', 'index')->name('orders.index');
     });
 });
