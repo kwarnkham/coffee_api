@@ -18,10 +18,30 @@ class DatabaseSeeder extends Seeder
         $time = now();
 
         DB::table('users')->insert([
-            'name' => 'admin',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-            'created_at' => $time,
-            'updated_at' => $time
+            [
+                'name' => 'admin',
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+                'created_at' => $time,
+                'updated_at' => $time,
+            ],
+            [
+                'name' => 'admin2',
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+                'created_at' => $time,
+                'updated_at' => $time,
+            ],
+            [
+                'name' => 'sale',
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+                'created_at' => $time,
+                'updated_at' => $time,
+            ],
+            [
+                'name' => 'sale2',
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+                'created_at' => $time,
+                'updated_at' => $time,
+            ]
         ]);
 
         $roles = ['admin', 'sale'];
@@ -44,6 +64,30 @@ class DatabaseSeeder extends Seeder
             [
                 'role_id' => 2,
                 'user_id' => 1,
+                'created_at' => $time,
+                'updated_at' => $time
+            ],
+            [
+                'role_id' => 1,
+                'user_id' => 2,
+                'created_at' => $time,
+                'updated_at' => $time
+            ],
+            [
+                'role_id' => 2,
+                'user_id' => 2,
+                'created_at' => $time,
+                'updated_at' => $time
+            ],
+            [
+                'role_id' => 2,
+                'user_id' => 3,
+                'created_at' => $time,
+                'updated_at' => $time
+            ],
+            [
+                'role_id' => 2,
+                'user_id' => 4,
                 'created_at' => $time,
                 'updated_at' => $time
             ],

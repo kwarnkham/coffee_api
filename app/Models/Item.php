@@ -29,6 +29,12 @@ class Item extends Model
         return $this->hasMany(Consume::class);
     }
 
+    public function latestConsume()
+    {
+        return $this->hasOne(Consume::class)
+            ->latestOfMany();
+    }
+
     public function scopeFilter(Builder $query, array $filters)
     {
         $query->when(

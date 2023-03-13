@@ -28,7 +28,7 @@ class ItemController extends Controller
             'note' => $data['note']
         ]);
 
-        return response()->json(['item' => $item->fresh()], ResponseStatus::CREATED->value);
+        return response()->json(['item' => $item->fresh(['latestPurchase'])], ResponseStatus::CREATED->value);
     }
 
     public function index()
@@ -36,7 +36,7 @@ class ItemController extends Controller
         $filters = request()->validate([
             'search' => ['sometimes', 'required']
         ]);
-        $query = Item::query()->orderBy('stock')->filter($filters);
+        $query = Item::query()->orderBy('stock')->filter($filters)->with(['latestPurchase', 'latestConsume']);
         return response()->json(['data' => $query->paginate(request()->per_page ?? 20)]);
     }
 
@@ -66,12 +66,12 @@ class ItemController extends Controller
     {
         $data = $request->validate([
             'quantity' => ['required', 'numeric', 'gt:0', 'lte:' . $item->stock],
+            'note' => ['']
         ]);
-        $item->consumes()->create([
-            'quantity' => $data['quantity']
-        ]);
+        $item->consumes()->create($data);
+
         $item->update(['stock' => $item->stock -= $data['quantity']]);
 
-        return response()->json(['item' => $item->fresh()]);
+        return response()->json(['item' => $item->fresh(['latestConsume', 'latestPurchase'])]);
     }
 }

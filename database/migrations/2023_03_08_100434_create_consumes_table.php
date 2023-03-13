@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('item_id')->constrained();
             $table->unsignedInteger('quantity');
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }
