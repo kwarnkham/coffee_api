@@ -14,15 +14,19 @@ class Purchase extends Model
     {
         static::created(function (Purchase $purchase) {
             $purchasable = $purchase->purchasable;
-            $purchasable->stock += $purchase->quantity;
-            $purchasable->save();
+            if ($purchasable instanceof Item) {
+                $purchasable->stock += $purchase->quantity;
+                $purchasable->save();
+            }
         });
 
         static::updated(function (Purchase $purchase) {
             if ($purchase->status == PurchaseStatus::CANCELED->value) {
                 $purchasable = $purchase->purchasable;
-                $purchasable->stock -= $purchase->quantity;
-                $purchasable->save();
+                if ($purchasable instanceof Item) {
+                    $purchasable->stock -= $purchase->quantity;
+                    $purchasable->save();
+                }
             }
         });
     }

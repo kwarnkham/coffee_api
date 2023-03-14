@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ToppingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -61,5 +63,18 @@ Route::controller(OrderController::class)->prefix('orders')->group(function () {
         Route::get('{order}', 'show')->name('orders.show');
         Route::put('{order}', 'update')->name('orders.update');
         Route::get('', 'index')->name('orders.index');
+    });
+});
+
+Route::controller(ExpenseController::class)->prefix('expenses')->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::post('purchase', 'purchase')->name('expenses.purchase');
+        Route::get('', 'index')->name('expenses.index');
+    });
+});
+
+Route::controller(PurchaseController::class)->prefix('purchases')->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('', 'index')->name('purchases.index');
     });
 });
