@@ -68,6 +68,7 @@ Route::controller(OrderController::class)->prefix('orders')->group(function () {
 
 Route::controller(ExpenseController::class)->prefix('expenses')->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
+        Route::put('{expense}', 'update')->name('expenses.update');
         Route::post('purchase', 'purchase')->name('expenses.purchase');
         Route::get('', 'index')->name('expenses.index');
     });

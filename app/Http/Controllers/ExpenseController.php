@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\ResponseStatus;
 use App\Models\Expense;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ExpenseController extends Controller
 {
@@ -36,5 +37,14 @@ class ExpenseController extends Controller
         return response()->json([
             'data' => Expense::query()->with(['latestPurchase'])->paginate(request()->per_page ?? 20)
         ]);
+    }
+
+    public function update(Expense $expense)
+    {
+        $expense->update(request()->validate([
+            'name' => ['required', Rule::unique('expenses', 'name')->ignoreModel($expense)]
+        ]));
+
+        return response()->json(['expense' => $expense]);
     }
 }
