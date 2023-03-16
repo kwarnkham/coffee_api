@@ -2,14 +2,34 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
+use App\Enums\ResponseStatus;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 
 class Order extends Model
 {
     use HasFactory;
+
+    public function checkStatus(int $status)
+    {
+        abort_if(
+            in_array($status, [
+                OrderStatus::PAID->value,
+                OrderStatus::PENDING->value,
+                OrderStatus::CANCELED->value
+            ]) && $this->status != OrderStatus::PENDING->value,
+            ResponseStatus::BAD_REQUEST->value,
+            'Order is not pending'
+        );
+
+        abort_if(
+            $status == OrderStatus::COMPLETED->value && $this->status != OrderStatus::PAID->value,
+            ResponseStatus::BAD_REQUEST->value,
+            'Can only complete a paid order'
+        );
+    }
 
     public function products()
     {

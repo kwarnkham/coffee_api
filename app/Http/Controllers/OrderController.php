@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderStatus;
+use App\Enums\ResponseStatus;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
@@ -55,14 +57,20 @@ class OrderController extends Controller
             'products.*.discount' => ['numeric'],
             'products.*.toppings' => ['array'],
             'products.*.toppings.*' => ['numeric'],
-            'note' => ['']
+            'note' => [''],
+            'status' => ['required', 'in:' . implode(',', OrderStatus::all())]
         ]);
 
+
         $products = Product::validateAndFresh($data, $order);
-        if (array_key_exists('note', $data)) $order->update(['note' => $data['note']]);
+
+        $order->checkStatus($data['status']);
 
         $order = DB::transaction(function () use ($data, $products, $order) {
-            $order->update(['note' => $data['note']]);
+            $updateData = ['status' => $data['status']];
+            if (array_key_exists('note', $data)) $updateData['note'] = $data['note'];
+            $order->update($updateData);
+
             $order->syncProductsAndToppings($data, $products);
 
             return $order->fresh(['products.pivot.toppings']);
