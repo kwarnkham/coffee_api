@@ -34,7 +34,6 @@ class Order extends Model
         }, $data['products']);
 
         $this->products->each(function ($product) {
-            $product->update(['stock' => $product->fresh()->stock + $product->pivot->quantity]);
             $product->pivot->toppings()->detach();
         });
 
@@ -53,7 +52,6 @@ class Order extends Model
 
         $orderProducts->each(function ($orderProduct) {
             $product = Product::query()->find($orderProduct->product_id);
-            $product->update(['stock' => $product->stock - $orderProduct->quantity]);
         });
 
         foreach ($data['products'] as $productData) {

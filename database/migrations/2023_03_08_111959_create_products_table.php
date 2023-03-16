@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->double('price');
             $table->text('description')->nullable();
-            $table->unsignedInteger('stock')->default(0);
             $table->tinyInteger('status')->default(ProductStatus::ENABLED->value);
             $table->timestamps();
         });

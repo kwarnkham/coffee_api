@@ -8,7 +8,6 @@ use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\Log;
 
 class Product extends BaseModel
 {
@@ -31,21 +30,21 @@ class Product extends BaseModel
         );
 
         $products->each(function ($product) use ($data, $order) {
-            if ($order) {
-                $stock = $product->stock + $order->products()->where('products.id', $product->id)->get()->reduce(fn ($carry, $val) => $carry + $val->pivot->quantity, 0);
-            } else {
-                $stock = $product->stock;
-            }
+            // if ($order) {
+            //     $stock = $product->stock + $order->products()->where('products.id', $product->id)->get()->reduce(fn ($carry, $val) => $carry + $val->pivot->quantity, 0);
+            // } else {
+            //     $stock = $product->stock;
+            // }
 
-            abort_if(
-                $stock < array_reduce(
-                    array_filter($data['products'], fn ($val) => $val['id'] == $product->id),
-                    fn ($carry, $val) => $val['quantity'] + $carry,
-                    0
-                ),
-                ResponseStatus::BAD_REQUEST->value,
-                "Quantity cannot be greater than stock($product->name)."
-            );
+            // abort_if(
+            //     $stock < array_reduce(
+            //         array_filter($data['products'], fn ($val) => $val['id'] == $product->id),
+            //         fn ($carry, $val) => $val['quantity'] + $carry,
+            //         0
+            //     ),
+            //     ResponseStatus::BAD_REQUEST->value,
+            //     "Quantity cannot be greater than stock($product->name)."
+            // );
 
             abort_if(
                 $product->price < (array_filter($data['products'], fn ($val) => $val['id'] == $product->id)[0]['discount'] ?? 0),

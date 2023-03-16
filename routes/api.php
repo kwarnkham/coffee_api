@@ -45,9 +45,6 @@ Route::controller(ItemController::class)->prefix('items')->group(function () {
 });
 
 Route::controller(ProductController::class)->prefix('products')->group(function () {
-    Route::middleware(['auth:sanctum'])->group(function () {
-        Route::post('{product}/stock', 'stock')->name('products.stock');
-    });
     Route::get('', 'index')->name('products.index');
 });
 
