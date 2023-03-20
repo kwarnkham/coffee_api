@@ -11,9 +11,10 @@ class ProductController extends Controller
     public function index()
     {
         $filters = request()->validate([
-            'search' => ['sometimes', 'required']
+            'search' => ['sometimes', 'required'],
+            'status' => ['sometimes', Rule::in([ProductStatus::ENABLED->value, ProductStatus::DISABLED->value])]
         ]);
-        $query = Product::query()->filter($filters)->where('status', ProductStatus::ENABLED->value);
+        $query = Product::query()->filter($filters);
         return response()->json(['data' => $query->paginate(request()->per_page ?? 20)]);
     }
 
