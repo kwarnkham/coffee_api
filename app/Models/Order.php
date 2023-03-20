@@ -36,7 +36,7 @@ class Order extends Model
         return $this->belongsToMany(Product::class)->using(OrderProduct::class)
             ->withTimestamps()
             ->withPivot([
-                'name', 'price', 'discount', 'quantity', 'id'
+                'name', 'price', 'discount', 'quantity', 'id', 'foc'
             ]);
     }
 
@@ -49,7 +49,8 @@ class Order extends Model
                 'price' => $product->price,
                 'discount' => $productData['discount'] ?? 0,
                 'quantity' => $productData['quantity'],
-                'id' => $product->id
+                'id' => $product->id,
+                'foc' => $productData['foc']
             ];
         }, $data['products']);
 
@@ -65,6 +66,7 @@ class Order extends Model
                 'price' => $productData['price'],
                 'discount' => $productData['discount'],
                 'quantity' => $productData['quantity'],
+                'foc' => $productData['foc']
             ]);
         }
 

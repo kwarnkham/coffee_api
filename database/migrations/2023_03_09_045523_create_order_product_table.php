@@ -19,6 +19,7 @@ return new class extends Migration
             $table->double('price');
             $table->unsignedInteger('quantity');
             $table->double('discount');
+            $table->boolean('foc')->default(false);
             $table->timestamps();
         });
     }

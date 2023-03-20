@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\OrderStatus;
-use App\Enums\ResponseStatus;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
-
 
 class OrderController extends Controller
 {
@@ -20,6 +18,7 @@ class OrderController extends Controller
             'products.*.id' => ['required', 'numeric'],
             'products.*.quantity' => ['required', 'numeric'],
             'products.*.discount' => ['numeric'],
+            'products.*.foc' => ['boolean'],
             'products.*.toppings' => ['array'],
             'products.*.toppings.*' => ['numeric'],
             'note' => ['']
@@ -55,12 +54,12 @@ class OrderController extends Controller
             'products.*.id' => ['required', 'numeric'],
             'products.*.quantity' => ['required', 'numeric'],
             'products.*.discount' => ['numeric'],
+            'products.*.foc' => ['boolean'],
             'products.*.toppings' => ['array'],
             'products.*.toppings.*' => ['numeric'],
             'note' => [''],
             'status' => ['required', 'in:' . implode(',', OrderStatus::all())]
         ]);
-
 
         $products = Product::validateAndFresh($data, $order);
 
