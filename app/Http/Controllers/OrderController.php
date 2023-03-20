@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Enums\OrderStatus;
+use App\Enums\ResponseStatus;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
+use LDAP\Result;
 
 class OrderController extends Controller
 {
@@ -64,6 +66,16 @@ class OrderController extends Controller
         $products = Product::validateAndFresh($data, $order);
 
         $order->checkStatus($data['status']);
+
+        abort_if(
+            in_array($data['status'], [
+                OrderStatus::COMPLETED->value,
+                OrderStatus::CANCELED->value,
+                OrderStatus::PAID->value
+            ]) && !request()->user()->hasRole('admin'),
+            ResponseStatus::UNAUTHORIZED->value,
+            'You are not an admin'
+        );
 
         $order = DB::transaction(function () use ($data, $products, $order) {
             $updateData = ['status' => $data['status']];

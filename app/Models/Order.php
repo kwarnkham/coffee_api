@@ -50,7 +50,7 @@ class Order extends Model
                 'discount' => $productData['discount'] ?? 0,
                 'quantity' => $productData['quantity'],
                 'id' => $product->id,
-                'foc' => $productData['foc']
+                'foc' => $productData['foc'] ?? 0
             ];
         }, $data['products']);
 
@@ -66,15 +66,11 @@ class Order extends Model
                 'price' => $productData['price'],
                 'discount' => $productData['discount'],
                 'quantity' => $productData['quantity'],
-                'foc' => $productData['foc']
+                'foc' => $productData['foc'] ?? 0
             ]);
         }
 
         $orderProducts = $this->fresh(['products'])->products->map(fn ($val) => $val->pivot);
-
-        $orderProducts->each(function ($orderProduct) {
-            $product = Product::query()->find($orderProduct->product_id);
-        });
 
         foreach ($data['products'] as $productData) {
             if (array_key_exists('toppings', $productData)) {

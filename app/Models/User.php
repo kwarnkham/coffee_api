@@ -22,4 +22,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
+
+    public function hasRole(string $roleName)
+    {
+        return $this->roles->contains(fn ($role) => $role->name == $roleName);
+    }
 }

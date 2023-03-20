@@ -36,11 +36,16 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::controller(ItemController::class)->prefix('items')->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
-        Route::post('purchase', 'purchase')->name('items.purchase');
-        Route::get('', 'index')->name('items.index');
-        Route::get('search', 'search')->name('items.search');
-        Route::put('{item}', 'update')->name('items.update');
-        Route::post('{item}/reduce-stock', 'reduceStock')->name('items.reduceStock');
+        Route::middleware(['role:admin'])->group(function () {
+            Route::post('purchase', 'purchase')->name('items.purchase');
+            Route::put('{item}', 'update')->name('items.update');
+        });
+
+        Route::middleware(['role:sale'])->group(function () {
+            Route::get('', 'index')->name('items.index');
+            Route::get('search', 'search')->name('items.search');
+            Route::post('{item}/reduce-stock', 'reduceStock')->name('items.reduceStock');
+        });
     });
 });
 
@@ -64,7 +69,7 @@ Route::controller(OrderController::class)->prefix('orders')->group(function () {
 });
 
 Route::controller(ExpenseController::class)->prefix('expenses')->group(function () {
-    Route::middleware(['auth:sanctum'])->group(function () {
+    Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
         Route::put('{expense}', 'update')->name('expenses.update');
         Route::post('purchase', 'purchase')->name('expenses.purchase');
         Route::get('', 'index')->name('expenses.index');
@@ -72,7 +77,7 @@ Route::controller(ExpenseController::class)->prefix('expenses')->group(function 
 });
 
 Route::controller(PurchaseController::class)->prefix('purchases')->group(function () {
-    Route::middleware(['auth:sanctum'])->group(function () {
+    Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
         Route::get('', 'index')->name('purchases.index');
     });
 });
