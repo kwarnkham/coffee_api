@@ -107,7 +107,13 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => $time
             ],
             [
-                'name' => 'Black Coffee (Ice/Hot)',
+                'name' => 'Black Coffee Ice',
+                'price' => 1500,
+                'created_at' => $time,
+                'updated_at' => $time
+            ],
+            [
+                'name' => 'Black Coffee Hot',
                 'price' => 1200,
                 'created_at' => $time,
                 'updated_at' => $time
@@ -120,7 +126,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'name' => 'Expresso',
-                'price' => 1800,
+                'price' => 1500,
                 'created_at' => $time,
                 'updated_at' => $time
             ],

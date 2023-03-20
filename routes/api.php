@@ -50,6 +50,10 @@ Route::controller(ItemController::class)->prefix('items')->group(function () {
 });
 
 Route::controller(ProductController::class)->prefix('products')->group(function () {
+    Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+        Route::post('', 'store')->name('products.store');
+        Route::put('{product}', 'update')->name('products.update');
+    });
     Route::get('', 'index')->name('products.index');
 });
 
