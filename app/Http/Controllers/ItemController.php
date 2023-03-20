@@ -28,7 +28,7 @@ class ItemController extends Controller
             'note' => $data['note']
         ]);
 
-        return response()->json(['item' => $item->fresh(['latestPurchase'])], ResponseStatus::CREATED->value);
+        return response()->json(['item' => $item->fresh(['latestPurchase', 'latestConsume'])], ResponseStatus::CREATED->value);
     }
 
     public function index()
@@ -37,7 +37,6 @@ class ItemController extends Controller
             'search' => ['sometimes', 'required']
         ]);
         $query = Item::query()
-            ->orderBy('stock')
             ->filter($filters)
             ->latest('updated_at')
             ->with(['latestPurchase', 'latestConsume']);
