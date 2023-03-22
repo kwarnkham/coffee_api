@@ -92,6 +92,6 @@ class OrderController extends Controller
 
     public function index()
     {
-        return response()->json(['data' => Order::query()->paginate(request()->per_page ?? 20)]);
+        return response()->json(['data' => Order::query()->latest('id')->paginate(request()->per_page ?? 20)]);
     }
 }
