@@ -92,6 +92,11 @@ class OrderController extends Controller
 
     public function index()
     {
-        return response()->json(['data' => Order::query()->latest('id')->paginate(request()->per_page ?? 20)]);
+        $filters = request()->validate([
+            'from' => ['sometimes', 'required', 'date'],
+            'to' => ['sometimes', 'required', 'date'],
+        ]);
+        $query = Order::query()->latest('id')->filter($filters);
+        return response()->json(['data' => $query->paginate(request()->per_page ?? 20)]);
     }
 }
