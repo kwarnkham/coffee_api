@@ -9,8 +9,22 @@ class PurchaseController extends Controller
 {
     public function index()
     {
+
+        $filters = request()->validate([
+            'from' => ['sometimes', 'required', 'date'],
+            'to' => ['sometimes', 'required', 'date'],
+            'summery' => ['sometimes', 'boolean']
+        ]);
+        if (array_key_exists('summery', $filters)) {
+        }
+        $query = Purchase::query()->latest('id')->filter($filters)->with(['purchasable']);
+        $summery = 0;
+        if (array_key_exists('summery', $filters)) {
+            $summery = $query->sum('price');
+        }
         return response()->json([
-            'data' => Purchase::query()->latest('id')->with(['purchasable'])->paginate(request()->per_page ?? 20)
+            'data' => $query->paginate(request()->per_page ?? 20),
+            'summery' => $summery
         ]);
     }
 }

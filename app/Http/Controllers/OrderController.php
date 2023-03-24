@@ -95,8 +95,16 @@ class OrderController extends Controller
         $filters = request()->validate([
             'from' => ['sometimes', 'required', 'date'],
             'to' => ['sometimes', 'required', 'date'],
+            'summery' => ['sometimes', 'boolean']
         ]);
         $query = Order::query()->latest('id')->filter($filters);
-        return response()->json(['data' => $query->paginate(request()->per_page ?? 20)]);
+        $summery = 0;
+        if (array_key_exists('summery', $filters)) {
+            $summery = $query->with(['products'])->get()->sum(fn ($order) => $order->products->sum(fn ($val) => $val->pivot->price * $val->pivot->quantity));
+        }
+        return response()->json([
+            'data' => $query->paginate(request()->per_page ?? 20),
+            'summery' => $summery
+        ]);
     }
 }
