@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PurchaseStatus;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 
@@ -20,7 +21,7 @@ class PurchaseController extends Controller
         $query = Purchase::query()->latest('id')->filter($filters)->with(['purchasable']);
         $summery = 0;
         if (array_key_exists('summery', $filters)) {
-            $summery = $query->sum('price');
+            $summery = $query->where('status', PurchaseStatus::NORMAL->value)->sum('price');
         }
         return response()->json([
             'data' => $query->paginate(request()->per_page ?? 20),
