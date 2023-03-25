@@ -97,10 +97,18 @@ class OrderController extends Controller
             'to' => ['sometimes', 'required', 'date'],
             'summery' => ['sometimes', 'boolean']
         ]);
-        $query = Order::query()->latest('id')->filter($filters);
+        $query = Order::query()->latest('id')->filter($filters)->with(['products.pivot.toppings']);
         $summery = 0;
         if (array_key_exists('summery', $filters)) {
-            $summery = $query->with(['products'])->get()->sum(fn ($order) => $order->products->sum(fn ($val) => $val->pivot->price * $val->pivot->quantity));
+            $summery = $query->get()->sum(
+                fn ($order) => $order->products->sum(
+                    fn ($product) => $product->pivot->foc ? 0 : ($product->pivot->price +
+                        $product->pivot->toppings->sum(
+                            fn ($topping) => $topping->pivot->price * $topping->pivot->quantity
+                        ) - $product->pivot->discount) *
+                        $product->pivot->quantity
+                )
+            );
         }
         return response()->json([
             'data' => $query->paginate(request()->per_page ?? 20),
