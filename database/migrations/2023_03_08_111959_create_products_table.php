@@ -18,6 +18,7 @@ return new class extends Migration
             $table->double('price');
             $table->text('description')->nullable();
             $table->tinyInteger('status')->default(ProductStatus::ENABLED->value);
+            $table->tinyInteger('group')->nullable();
             $table->timestamps();
         });
     }

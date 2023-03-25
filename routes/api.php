@@ -6,7 +6,9 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ToppingController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -79,6 +81,20 @@ Route::controller(ExpenseController::class)->prefix('expenses')->group(function 
         Route::get('', 'index')->name('expenses.index');
     });
 });
+
+Route::controller(RoleController::class)->prefix('roles')->group(function () {
+    Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+        Route::get('', 'index')->name('roles.index');
+    });
+});
+
+Route::controller(UserController::class)->prefix('users')->group(function () {
+    Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+        Route::post('', 'store')->name('users.store');
+        Route::get('', 'index')->name('users.index');
+    });
+});
+
 
 Route::controller(PurchaseController::class)->prefix('purchases')->group(function () {
     Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
