@@ -29,6 +29,21 @@ class AuthController extends Controller
         return response()->json(['token' => $token->plainTextToken, 'user' => $user]);
     }
 
+    public function changePassword()
+    {
+        $data = request()->validate([
+            'password' => ['required'],
+            'new_password' => ['required', 'confirmed']
+        ]);
+        $user = request()->user();
+        abort_unless(Hash::check($data['password'], $user->password), ResponseStatus::UNAUTHORIZED->value, 'Incorrect Password');
+
+        $user->password = bcrypt($data['new_password']);
+        $user->save();
+
+        return response()->json(['user' => $user]);
+    }
+
     public function user()
     {
         return response()->json(['user' => request()->user()]);
