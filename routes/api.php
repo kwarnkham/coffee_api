@@ -83,7 +83,7 @@ Route::controller(ExpenseController::class)->prefix('expenses')->group(function 
 });
 
 Route::controller(RoleController::class)->prefix('roles')->group(function () {
-    Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('', 'index')->name('roles.index');
     });
 });
@@ -91,7 +91,12 @@ Route::controller(RoleController::class)->prefix('roles')->group(function () {
 Route::controller(UserController::class)->prefix('users')->group(function () {
     Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
         Route::post('', 'store')->name('users.store');
+    });
+    Route::middleware(['auth:sanctum', 'role:sale'])->group(function () {
         Route::get('', 'index')->name('users.index');
+        Route::post('customer', 'storeCustomer')->name('users.storeCustomer');
+        Route::post('{user}/cups', 'addCup')->name('users.addCup');
+        Route::post('{user}/redeem', 'redeem')->name('users.redeem');
     });
 });
 

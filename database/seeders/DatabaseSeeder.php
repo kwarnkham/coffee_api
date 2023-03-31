@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
             ]
         ]);
 
-        $roles = ['admin', 'sale'];
+        $roles = ['admin', 'sale', 'investor', 'customer'];
 
         foreach ($roles as $role) {
             DB::table('roles')->insert([
