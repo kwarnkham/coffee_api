@@ -67,7 +67,8 @@ class UserController extends Controller
     public function index()
     {
         $filters = request()->validate([
-            'role' => ['string']
+            'role' => ['string'],
+            'search' => ['']
         ]);
         $query = User::query()->latest('id')->filter($filters);
         return response()->json(['data' => $query->paginate(request()->per_page ?? 20)]);

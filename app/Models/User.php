@@ -36,5 +36,10 @@ class User extends Authenticatable
             $filters['role'] ?? null,
             fn (Builder $query, $role) => $query->whereRelation('roles', 'name', $role)
         );
+
+        $query->when(
+            $filters['search'] ?? null,
+            fn (Builder $query, $search) => $query->where('name', 'like', '%' . $search . '%')
+        );
     }
 }
