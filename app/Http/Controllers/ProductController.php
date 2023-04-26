@@ -12,7 +12,7 @@ class ProductController extends Controller
     {
         $filters = request()->validate([
             'search' => ['sometimes', 'required'],
-            'status' => ['sometimes', Rule::in([ProductStatus::ENABLED->value, ProductStatus::DISABLED->value])]
+            'status' => ['sometimes', Rule::in([ProductStatus::ENABLED->value, ProductStatus::DISABLED->value])],
         ]);
         $query = Product::query()->filter($filters);
         return response()->json(['data' => $query->paginate(request()->per_page ?? 20)]);
@@ -24,7 +24,8 @@ class ProductController extends Controller
             'name' => ['required', 'unique:products,name'],
             'price' => ['required', 'numeric'],
             'description' => [''],
-            'status' => ['required', Rule::in([ProductStatus::ENABLED->value, ProductStatus::DISABLED->value])]
+            'status' => ['required', Rule::in([ProductStatus::ENABLED->value, ProductStatus::DISABLED->value])],
+            'group' => ['numeric']
         ]);
 
         $product = Product::create($data);
@@ -38,7 +39,8 @@ class ProductController extends Controller
             'name' => ['required', Rule::unique('products', 'name')->ignoreModel($product)],
             'price' => ['required', 'numeric'],
             'description' => [''],
-            'status' => ['required', Rule::in([ProductStatus::ENABLED->value, ProductStatus::DISABLED->value])]
+            'status' => ['required', Rule::in([ProductStatus::ENABLED->value, ProductStatus::DISABLED->value])],
+            'group' => ['numeric']
         ]);
 
         $product->update($data);
