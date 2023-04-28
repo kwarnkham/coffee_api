@@ -84,9 +84,8 @@ Route::controller(ExpenseController::class)->prefix('expenses')->group(function 
 });
 
 Route::controller(RoleController::class)->prefix('roles')->group(function () {
-    Route::middleware(['auth:sanctum'])->group(function () {
-        Route::get('', 'index')->name('roles.index');
-    });
+
+    Route::get('', 'index')->name('roles.index');
 });
 
 Route::controller(UserController::class)->prefix('users')->group(function () {
