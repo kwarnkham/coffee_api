@@ -20,8 +20,11 @@ class Item extends Model
     public function latestPurchase()
     {
         return $this->morphOne(Purchase::class, 'purchasable')
-            ->latestOfMany()
-            ->where('status', PurchaseStatus::NORMAL->value);
+            ->ofMany([
+                'id' => 'max',
+            ], function (Builder $query) {
+                $query->where('status', '=', PurchaseStatus::NORMAL->value);
+            });
     }
 
     public function consumes()

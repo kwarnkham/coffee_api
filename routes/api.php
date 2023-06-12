@@ -84,7 +84,6 @@ Route::controller(ExpenseController::class)->prefix('expenses')->group(function 
 });
 
 Route::controller(RoleController::class)->prefix('roles')->group(function () {
-
     Route::get('', 'index')->name('roles.index');
 });
 
